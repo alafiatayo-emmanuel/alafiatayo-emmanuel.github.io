@@ -26,35 +26,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the repository
       - name: Checkout
         uses: actions/checkout@v4
-        
-      # Set up Ruby (required for Jekyll)
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '2.7'  # Adjust to the version you are using for Jekyll
-      
-      # Install dependencies (including Jekyll and jekyll-sitemap)
-      - name: Install dependencies
-        run: |
-          gem install jekyll
-          gem install jekyll-sitemap
-          bundle install
-
-      # Build the Jekyll site
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: ./  # Path to your Jekyll source directory (usually root)
-          destination: ./_site  # Directory where Jekyll builds the site
-
-      # Upload the built site as an artifact
+          source: ./
+          destination: ./_site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./_site
 
   # Deployment job
   deploy:
@@ -64,7 +46,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
